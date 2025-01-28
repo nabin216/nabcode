@@ -32,7 +32,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          cd backebd
+          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
         
@@ -51,7 +51,7 @@ jobs:
             backend/release.zip
             !venv/
 
-      -name: collect static files
+      - name: collect static files
         run: |
           cd backend
           python manage.py collectstatic --noinput
@@ -77,9 +77,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_39F3DCA55903435780F7EE6E7114FF29 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_10F343455F6F497AA32EA6DB25CE4715 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_EF03926B32744208AF291088783284EB }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
