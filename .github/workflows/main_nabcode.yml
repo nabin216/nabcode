@@ -29,25 +29,37 @@ jobs:
           cd backend/mybackend
           source venv/bin/activate
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ../requirements.txt
 
       - name: Run backend tests
+        env:
+          DJANGO_SETTINGS_MODULE: mybackend.settings
         run: |
           cd backend/mybackend
           source venv/bin/activate
           python manage.py test
 
       - name: Collect static files
+        env:
+          DJANGO_SETTINGS_MODULE: mybackend.settings
         run: |
           cd backend/mybackend
           source venv/bin/activate
           python manage.py collectstatic --noinput
 
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets['AZURE_CLIENT_ID'] }}
+          tenant-id: ${{ secrets['AZURE_TENANT_ID'] }}
+          subscription-id: ${{ secrets['AZURE_SUBSCRIPTION_ID'] }}
+          client-secret: ${{ secrets['AZURE_CLIENT_SECRET'] }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME_BACKEND }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND }}
+          app-name: ${{ secrets['AZURE_WEBAPP_NAME_BACKEND'] }}
+          publish-profile: ${{ secrets['AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND'] }}
           package: backend/mybackend
 
   build-and-deploy-frontend:
@@ -72,6 +84,14 @@ jobs:
         run: |
           cd myapp
           npm run build
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
