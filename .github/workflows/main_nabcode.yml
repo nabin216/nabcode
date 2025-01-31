@@ -54,16 +54,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets['AZURE_CLIENT_ID'] }}
-          tenant-id: ${{ secrets['AZURE_TENANT_ID'] }}
-          subscription-id: ${{ secrets['AZURE_SUBSCRIPTION_ID'] }}
-          client-secret: ${{ secrets['AZURE_CLIENT_SECRET'] }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          auth-type: 'oidc'
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets['AZURE_WEBAPP_NAME_BACKEND'] }}
-          publish-profile: ${{ secrets['AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND'] }}
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME_BACKEND }}
           package: backend/mybackend
 
   build-and-deploy-frontend:
@@ -95,11 +94,10 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          auth-type: 'oidc'
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME_FRONTEND }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
           package: myapp/build
