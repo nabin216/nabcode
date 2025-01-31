@@ -35,7 +35,6 @@ jobs:
           cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pywin32==304
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
